@@ -14,6 +14,10 @@ from isaaclab.app import AppLauncher
 # local imports
 import cli_args  # isort: skip
 
+set_default_task_flag=True
+debug_task = "Isaac-Velocity-Flat-IHMC-Nadia-Play-v0"
+debug_num_envs = 32
+
 # add argparse arguments
 parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
 parser.add_argument("--video", action="store_true", default=False, help="Record videos during training.")
@@ -37,6 +41,11 @@ args_cli = parser.parse_args()
 # always enable cameras to record video
 if args_cli.video:
     args_cli.enable_cameras = True
+
+# Set Default args
+if set_default_task_flag:
+    args_cli.task=debug_task
+    args_cli.num_envs=debug_num_envs
 
 # launch omniverse app
 app_launcher = AppLauncher(args_cli)

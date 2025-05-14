@@ -15,6 +15,14 @@ from isaaclab.app import AppLauncher
 # local imports
 import cli_args  # isort: skip
 
+set_default_task_flag=True
+# debug_task = "Isaac-Imitate-Flat-Nadia-v0"
+# debug_task = "Isaac-Velocity-Flat-Unitree-A1-v0"
+debug_task = "Isaac-Velocity-Flat-IHMC-Nadia-v0"
+debug_num_envs = 8196
+debug_headless=True
+debug_resume=False
+
 
 # add argparse arguments
 parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
@@ -33,6 +41,13 @@ cli_args.add_rsl_rl_args(parser)
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
 args_cli, hydra_args = parser.parse_known_args()
+
+# Set Default args
+if set_default_task_flag:
+    args_cli.task=debug_task
+    args_cli.num_envs=debug_num_envs
+    args_cli.resume=debug_resume
+    args_cli.headless=debug_headless
 
 # always enable cameras to record video
 if args_cli.video:

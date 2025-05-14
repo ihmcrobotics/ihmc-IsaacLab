@@ -9,11 +9,11 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, R
 
 
 @configclass
-class UnitreeA1FlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+class NadiaRoughPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 24
-    max_iterations = 1500
+    max_iterations = 3000
     save_interval = 50
-    experiment_name = "unitree_a1_rough"
+    experiment_name = "nadia_rough"
     empirical_normalization = False
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
@@ -38,11 +38,11 @@ class UnitreeA1FlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
 
 
 @configclass
-class UnitreeA1RoughPPORunnerCfg(UnitreeA1FlatPPORunnerCfg):
+class NadiaFlatPPORunnerCfg(NadiaRoughPPORunnerCfg):
     def __post_init__(self):
         super().__post_init__()
 
-        self.max_iterations = 300
-        self.experiment_name = "unitree_a1_flat"
+        self.max_iterations = 10000
+        self.experiment_name = "nadia_flat"
         self.policy.actor_hidden_dims = [128, 128, 128]
         self.policy.critic_hidden_dims = [128, 128, 128]
