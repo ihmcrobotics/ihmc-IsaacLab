@@ -70,7 +70,7 @@ x-default-isaac-lab-deploy: &default-isaac-lab-deploy
     reservations:
       devices:
         - driver: nvidia
-          count: all
+          device_ids: [ "1, 2" ]
           capabilities: [ gpu ]
 
 services:

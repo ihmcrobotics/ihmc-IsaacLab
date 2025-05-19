@@ -74,6 +74,9 @@ import os
 import torch
 from datetime import datetime
 
+# Limit GPU memory usage:
+torch.cuda.set_per_process_memory_fraction(0.25)
+
 from rsl_rl.runners import OnPolicyRunner
 
 from isaaclab.envs import (

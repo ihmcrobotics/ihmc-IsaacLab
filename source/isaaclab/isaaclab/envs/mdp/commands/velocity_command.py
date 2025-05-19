@@ -75,8 +75,8 @@ class UniformVelocityCommand(CommandTerm):
         self.robot: Articulation = env.scene[cfg.asset_name]
 
         # crete buffers to store the command
-        # -- command: x vel, y vel, yaw vel, heading
-        self.vel_command_b = torch.zeros(self.num_envs, 3, device=self.device)
+        # -- command: x vel, y vel, yaw vel, height, heading
+        self.vel_command_b = torch.zeros(self.num_envs, 4, device=self.device)
         self.heading_target = torch.zeros(self.num_envs, device=self.device)
         self.is_heading_env = torch.zeros(self.num_envs, dtype=torch.bool, device=self.device)
         self.is_standing_env = torch.zeros_like(self.is_heading_env)
@@ -129,6 +129,8 @@ class UniformVelocityCommand(CommandTerm):
         self.vel_command_b[env_ids, 1] = r.uniform_(*self.cfg.ranges.lin_vel_y)
         # -- ang vel yaw - rotation around z
         self.vel_command_b[env_ids, 2] = r.uniform_(*self.cfg.ranges.ang_vel_z)
+        # -- height - position relative to z
+        self.vel_command_b[env_ids, 3] = r.uniform_(*self.cfg.ranges.lin_pos_z)
         # heading target
         if self.cfg.heading_command:
             self.heading_target[env_ids] = r.uniform_(*self.cfg.ranges.heading)

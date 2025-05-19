@@ -61,6 +61,9 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper, expor
 import isaaclab_tasks  # noqa: F401
 from isaaclab_tasks.utils import get_checkpoint_path, parse_env_cfg
 
+# Limit GPU memory usage:
+torch.cuda.set_per_process_memory_fraction(0.25)
+
 # PLACEHOLDER: Extension template (do not remove this comment)
 
 

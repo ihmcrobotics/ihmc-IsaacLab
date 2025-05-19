@@ -72,6 +72,9 @@ class UniformVelocityCommandCfg(CommandTermCfg):
         ang_vel_z: tuple[float, float] = MISSING
         """Range for the angular-z velocity command (in rad/s)."""
 
+        lin_pos_z: tuple[float, float] = MISSING
+        """Range for the linear-z position command (in m)."""
+
         heading: tuple[float, float] | None = None
         """Range for the heading command (in rad). Defaults to None.
 
