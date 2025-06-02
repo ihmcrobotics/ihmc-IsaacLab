@@ -15,8 +15,8 @@ from isaaclab.app import AppLauncher
 import cli_args  # isort: skip
 
 set_default_task_flag=True
-debug_task = "Isaac-Velocity-Flat-IHMC-Nadia-Play-v0"
-debug_num_envs = 32
+debug_task = "Isaac-Velocity-Rough-H1-v0"
+debug_num_envs = 1
 
 # add argparse arguments
 parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
