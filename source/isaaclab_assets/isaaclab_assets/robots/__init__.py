@@ -24,3 +24,4 @@ from .shadow_hand import *
 from .spot import *
 from .unitree import *
 from .universal_robots import *
+from .h1_2 import H1_2_CFG
