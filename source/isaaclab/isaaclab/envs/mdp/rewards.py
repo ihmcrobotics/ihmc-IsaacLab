@@ -307,3 +307,24 @@ def track_ang_vel_z_exp(
     # compute the error
     ang_vel_error = torch.square(env.command_manager.get_command(command_name)[:, 2] - asset.data.root_ang_vel_b[:, 2])
     return torch.exp(-ang_vel_error / std**2)
+
+
+def base_height_command(
+    env: ManagerBasedRLEnv,
+    command_name: str,
+    asset_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
+    sensor_cfg: SceneEntityCfg | None = None,
+) -> torch.Tensor:
+    """Penalize asset height from its target using L2 squared kernel.
+
+    Note:
+        For flat terrain, target height is in the world frame. For rough terrain,
+        sensor readings can adjust the target height to account for the terrain.
+    """
+    # extract the used quantities (to enable type-hinting)
+    asset: RigidObject = env.scene[asset_cfg.name]
+    # Compute the L2 squared penalty
+    height = asset.data.root_pos_w[:, 2] 
+    goal = env.command_manager.get_command(command_name)[:, 3]
+    error = torch.abs(height - goal)
+    return torch.exp(-error/0.2) - error
