@@ -59,7 +59,6 @@ H1_2_CFG = ArticulationCfg(
             damping=10.0,
         ),
        
-        # We define a group for the fingers but give them no motor force.
         # This makes them passive and solves the warning without trying to control them.
         "fingers": ImplicitActuatorCfg(
             joint_names_expr=[".*(index|middle|pinky|ring|thumb).*_joint"],

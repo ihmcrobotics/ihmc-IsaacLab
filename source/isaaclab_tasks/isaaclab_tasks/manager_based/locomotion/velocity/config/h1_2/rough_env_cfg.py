@@ -17,122 +17,117 @@ from isaaclab_assets.robots.h1_2 import H1_2_CFG  # isort: skip
 
 
 
-@configclass
-class H1_2Rewards(RewardsCfg):
-    """Reward terms for the STANDING task, using existing functions."""
-
-    # -- Primary Rewards for Standing Still --
-
-    # 1. Main driver: Reward for tracking a zero-velocity command (i.e., not moving).
-    # We can increase the weight to make this the most important goal.
-    track_lin_vel_xy_exp = RewTerm(
-        func=mdp.track_lin_vel_xy_yaw_frame_exp,
-        weight=2.0,  # Increased weight to emphasize stability
-        params={"command_name": "base_velocity", "std": 0.25},  # Smaller std for tighter tracking
-    )
-    track_ang_vel_z_exp = RewTerm(
-        func=mdp.track_ang_vel_z_world_exp, 
-        weight=1.5, # Increased weight
-        params={"command_name": "base_velocity", "std": 0.25},
-    )
-
-    
-
-    # 2. Add a penalty for not being upright (this is a standard term and should exist).
-    flat_orientation_l2 = RewTerm(func=mdp.flat_orientation_l2, weight=-1.0)
-    
-    # 3. Penalize deviation from the default standing pose to keep it from crouching.
-    joint_deviation_hip = RewTerm(
-        func=mdp.joint_deviation_l1,
-        weight=-0.2,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*_hip_yaw_joint", ".*_hip_roll_joint"])},
-    )
-    joint_deviation_arms = RewTerm(
-        func=mdp.joint_deviation_l1,
-        weight=-0.2,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*_shoulder_.*_joint", ".*_elbow_.*_joint"])},
-    )
-    joint_deviation_torso = RewTerm(
-        func=mdp.joint_deviation_l1, 
-        weight=-0.1, 
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names="torso_joint")}
-    )
-
-    # -- Penalties & Disabled Terms --
-
-    # Keep the penalty for falling over.
-    termination_penalty = RewTerm(func=mdp.is_terminated, weight=-10.0)
-
-    # Disable rewards that are only for locomotion.
-    feet_air_time = None
-    feet_slide = None
-    undesired_contacts = None
-    lin_vel_z_l2 = None
-
-    
 # @configclass
 # class H1_2Rewards(RewardsCfg):
-#     """Reward terms for the MDP."""
+#     """Reward terms for the STANDING task, using existing functions."""
 
-#     termination_penalty = RewTerm(func=mdp.is_terminated, weight=-200.0)
-#     lin_vel_z_l2 = None
-#     undesired_contacts = RewTerm(
-#     func=mdp.undesired_contacts,
-#     weight=-0.5,
-#     params={
-#         "sensor_cfg": SceneEntityCfg("contact_forces", body_names=[".*torso_link", ".*hip.*_link", ".*knee_link"]),
-#         "threshold": 0.5,
-#     },
-#     )
+#     # -- Primary Rewards for Standing Still --
+
+#     # 1. Main driver: Reward for tracking a zero-velocity command (i.e., not moving).
+#     # We can increase the weight to make this the most important goal.
 #     track_lin_vel_xy_exp = RewTerm(
 #         func=mdp.track_lin_vel_xy_yaw_frame_exp,
-#         weight=1.0,
-#         params={"command_name": "base_velocity", "std": 0.5},
+#         weight=2.0,  # Increased weight to emphasize stability
+#         params={"command_name": "base_velocity", "std": 0.25},  # Smaller std for tighter tracking
 #     )
 #     track_ang_vel_z_exp = RewTerm(
-#         func=mdp.track_ang_vel_z_world_exp, weight=1.0, params={"command_name": "base_velocity", "std": 0.5}
+#         func=mdp.track_ang_vel_z_world_exp, 
+#         weight=1.5, # Increased weight
+#         params={"command_name": "base_velocity", "std": 0.25},
 #     )
-#     feet_air_time = RewTerm(
-#         func=mdp.feet_air_time_positive_biped,
-#         weight=0.25,
-#         params={
-#             "command_name": "base_velocity",
-#             # CORRECTED: Use a pattern that matches the ankle links
-#             "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*ankle_.*_link"),
-#             "threshold": 0.4,
-#         },
-#     )
-#     feet_slide = RewTerm(
-#         func=mdp.feet_slide,
-#         weight=-0.25,
-#         params={
-#             # CORRECTED: Use a pattern that matches the ankle links
-#             "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*ankle_.*_link"),
-#             "asset_cfg": SceneEntityCfg("robot", body_names=".*ankle_.*_link"),
-#         },
-#     )
-#     dof_pos_limits = RewTerm(
-#         func=mdp.joint_pos_limits, weight=-1.0, 
-#         # CORRECTED: Use a pattern that matches the ankle joints
-#         params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*_ankle_.*_joint")}
-#     )
+
+    
+
+#     # 2. Add a penalty for not being upright (this is a standard term and should exist).
+#     flat_orientation_l2 = RewTerm(func=mdp.flat_orientation_l2, weight=-1.0)
+    
+#     # 3. Penalize deviation from the default standing pose to keep it from crouching.
 #     joint_deviation_hip = RewTerm(
 #         func=mdp.joint_deviation_l1,
 #         weight=-0.2,
-#         # CORRECTED: Use a pattern that matches the hip joints
 #         params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*_hip_yaw_joint", ".*_hip_roll_joint"])},
 #     )
 #     joint_deviation_arms = RewTerm(
 #         func=mdp.joint_deviation_l1,
 #         weight=-0.2,
-#         # CORRECTED: Use a pattern that matches the arm joints
 #         params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*_shoulder_.*_joint", ".*_elbow_.*_joint"])},
 #     )
 #     joint_deviation_torso = RewTerm(
-#         func=mdp.joint_deviation_l1, weight=-0.1, 
-#         # CORRECTED: Use a pattern that matches the torso joint
+#         func=mdp.joint_deviation_l1, 
+#         weight=-0.1, 
 #         params={"asset_cfg": SceneEntityCfg("robot", joint_names="torso_joint")}
 #     )
+
+#     # -- Penalties & Disabled Terms --
+
+#     # Keep the penalty for falling over.
+#     termination_penalty = RewTerm(func=mdp.is_terminated, weight=-10.0)
+
+#     # Disable rewards that are only for locomotion.
+#     feet_air_time = None
+#     feet_slide = None
+#     undesired_contacts = None
+#     lin_vel_z_l2 = None
+
+    
+@configclass
+class H1_2Rewards(RewardsCfg):
+    """Reward terms for the MDP."""
+
+    termination_penalty = RewTerm(func=mdp.is_terminated, weight=-200.0)
+    lin_vel_z_l2 = None
+    track_lin_vel_xy_exp = RewTerm(
+        func=mdp.track_lin_vel_xy_yaw_frame_exp,
+        weight=1.0,
+        params={"command_name": "base_velocity", "std": 0.5},
+    )
+    track_ang_vel_z_exp = RewTerm(
+        func=mdp.track_ang_vel_z_world_exp, weight=1.0, params={"command_name": "base_velocity", "std": 0.5}
+    )
+    feet_air_time = RewTerm(
+        func=mdp.feet_air_time_positive_biped,
+        weight=0.25,
+        params={
+            "command_name": "base_velocity",
+            "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*ankle_.*_link"),
+            
+            "threshold": 0.4,
+        },
+    )
+
+    feet_slide = RewTerm(
+        func=mdp.feet_slide,
+        weight=-0.25,
+        params={
+            "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*ankle_.*_link"),
+            "asset_cfg": SceneEntityCfg("robot",
+                                    body_names=[".*_ankle_pitch_link", ".*_ankle_roll_link"],
+                                    joint_names=[".*_ankle_pitch_joint", ".*_ankle_roll_joint"]),
+        },
+    )
+
+    dof_pos_limits = RewTerm(
+        func=mdp.joint_pos_limits,
+        weight=-1.0,
+        params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*_ankle_pitch_joint", ".*_ankle_roll_joint"])}
+    )
+    joint_deviation_hip = RewTerm(
+        func=mdp.joint_deviation_l1,
+        weight=-0.2,
+        # CORRECTED: Use a pattern that matches the hip joints
+        params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*_hip_yaw_joint", ".*_hip_roll_joint"])},
+    )
+    joint_deviation_arms = RewTerm(
+        func=mdp.joint_deviation_l1,
+        weight=-0.2,
+        # CORRECTED: Use a pattern that matches the arm joints
+        params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*_shoulder_.*_joint", ".*_elbow_.*_joint"])},
+    )
+    joint_deviation_torso = RewTerm(
+        func=mdp.joint_deviation_l1, weight=-0.1, 
+        # CORRECTED: Use a pattern that matches the torso joint
+        params={"asset_cfg": SceneEntityCfg("robot", joint_names="torso_joint")}
+    )
 
 
 @configclass
@@ -161,6 +156,22 @@ class H1_2RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
       
         # Terminations
         self.terminations.base_contact.params["sensor_cfg"].body_names = ["torso_link"]
+
+        # Rewards
+        self.rewards.undesired_contacts = None
+        self.rewards.flat_orientation_l2.weight = -1.0
+        self.rewards.dof_torques_l2.weight = 0.0
+        self.rewards.action_rate_l2.weight = -0.005
+        self.rewards.dof_acc_l2.weight = -1.25e-7
+
+        # Commands
+        self.commands.base_velocity.ranges.lin_vel_x = (0.0, 1.0)
+        self.commands.base_velocity.ranges.lin_vel_y = (0.0, 0.0)
+        self.commands.base_velocity.ranges.ang_vel_z = (-1.0, 1.0)
+
+        # terminations
+        self.terminations.base_contact.params["sensor_cfg"].body_names = ".*torso_link"
+
 
 
 @configclass
