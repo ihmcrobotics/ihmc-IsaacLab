@@ -6,7 +6,7 @@
 from isaaclab.utils import configclass
 
 from .rough_env_cfg import H1_2RoughEnvCfg
-import isaaclab.sim as sim_utils
+
 
 @configclass
 class H1_2FlatEnvCfg(H1_2RoughEnvCfg):
@@ -24,6 +24,8 @@ class H1_2FlatEnvCfg(H1_2RoughEnvCfg):
         self.curriculum.terrain_levels = None
         # self.rewards.feet_air_time.weight = 1.0
         # self.rewards.feet_air_time.params["threshold"] = 0.6
+        self.events.base_external_force_torque = None
+        self.events.push_robot = None
 
 
 class H1_2FlatEnvCfg_PLAY(H1_2FlatEnvCfg):
@@ -35,10 +37,10 @@ class H1_2FlatEnvCfg_PLAY(H1_2FlatEnvCfg):
         self.scene.num_envs = 50
         self.scene.env_spacing = 2.5
 
-        self.scene.terrain.physics_material = sim_utils.RigidBodyMaterialCfg(
-            friction=0.9,       # You can tune this value
-            restitution=0.0     # Not bouncy
-        )
+        # self.scene.terrain.physics_material = sim_utils.RigidBodyMaterialCfg(
+        #     friction=0.9,       # You can tune this value
+        #     restitution=0.0     # Not bouncy
+        # )
         # disable randomization for play
         self.observations.policy.enable_corruption = False
         # remove random pushing
