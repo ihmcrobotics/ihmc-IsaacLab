@@ -12,15 +12,18 @@ import isaaclab.sim as sim_utils
 from isaaclab.actuators import ImplicitActuatorCfg
 from isaaclab.assets.articulation import ArticulationCfg
 from isaaclab.utils.assets import ISAACLAB_NUCLEUS_DIR
+from isaaclab_assets import ISAACLAB_ASSETS_DATA_DIR
+
 
 ##
 # Configuration
 ##
 
+ALEXANDER_USD_PATH = f"{ISAACLAB_ASSETS_DATA_DIR}/Robots/IHMC/Alexander/alexander.usd"
 
 ALEXANDER_V1 = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(
-        usd_path="../nadia-orbit-data/robot/alexander/usds/v1/test_flat2.usd",
+        usd_path=ALEXANDER_USD_PATH,
         activate_contact_sensors=False,
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             disable_gravity=False,
